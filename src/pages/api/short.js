@@ -18,6 +18,14 @@ export default async function handler(req, res) {
         res.status(400).json({ success: false });
       }
       break;
+    case "GET":
+      try {
+        const urls = await Url.find({});
+        res.status(200).json({ success: true, data: urls });
+      } catch (error) {
+        res.status(500).json({ success: false, message: "Server error" });
+      }
+      break;
     default:
       res.status(400).json({ success: false });
       break;

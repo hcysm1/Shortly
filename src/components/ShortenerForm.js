@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ShortenerForm() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
+  const [urlHistory, setUrlHistory] = useState([]);
 
+  useEffect(() => {
+    const fetchUrlHistory = async () => {
+      const res = await fetch("/api/short");
+      const data = await res.json();
+      setUrlHistory(data.data);
+    };
+
+    fetchUrlHistory();
+  }, []);
+
+  ///////
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -17,7 +29,14 @@ export default function ShortenerForm() {
 
     const data = await res.json();
     setShortUrl(data.data.shortUrl);
+    setUrl("");
+
+    // Fetch the updated URL history after adding a new short URL
+    const updatedRes = await fetch("/api/short");
+    const updatedData = await updatedRes.json();
+    setUrlHistory(updatedData.data);
   };
+  ///////
 
   return (
     <div>
@@ -57,9 +76,16 @@ export default function ShortenerForm() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>{shortUrl}</td>
-          </tr>
+          {urlHistory.map((entry) => (
+            <tr key={entry._id}>
+              <td>{entry.shortUrl}</td>
+              <td>{entry.originalUrl}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>{new Date(entry.createdAt).toLocaleDateString()}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
