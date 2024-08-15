@@ -9,6 +9,10 @@ const UrlSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  shortCode: {
+    type: String,
+    required: true,
+  },
   qrCode: {
     type: String,
   },

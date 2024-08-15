@@ -29,6 +29,8 @@ export default function ShortenerForm() {
 
     const data = await res.json();
     setShortUrl(data.data.shortUrl);
+    console.log(data.data.shortUrl);
+
     setUrl("");
 
     // Fetch the updated URL history after adding a new short URL
@@ -64,6 +66,7 @@ export default function ShortenerForm() {
           Shorten Now!
         </button>
       </form>
+
       <table className="w-full max-w-5xl mt-10">
         <thead>
           <tr className="text-left bg-gray-200">
@@ -78,11 +81,16 @@ export default function ShortenerForm() {
         <tbody>
           {urlHistory.map((entry) => (
             <tr key={entry._id}>
-              <td>{entry.shortUrl}</td>
+              <td>
+                {" "}
+                <a href={entry.shortUrl} target="_blank">
+                  {entry.shortUrl}
+                </a>
+              </td>
               <td>{entry.originalUrl}</td>
               <td></td>
-              <td></td>
-              <td></td>
+              <td>{entry.clicks}</td>
+              <td>{entry.status}</td>
               <td>{new Date(entry.createdAt).toLocaleDateString()}</td>
             </tr>
           ))}

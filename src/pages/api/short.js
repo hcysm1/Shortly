@@ -6,13 +6,15 @@ export default async function handler(req, res) {
   const { method } = req; //extracts the HTTP method (e.g., GET, POST) from the request.
 
   await dbConnect(); //check if database is connected
+  const baseUrl = process.env.BASE_URL || "http://localhost:3000";
 
   switch (method) {
     case "POST":
       try {
         const { originalUrl } = req.body;
-        const shortUrl = nanoid(6);
-        const newUrl = await Url.create({ originalUrl, shortUrl });
+        const shortCode = nanoid(6);
+        const shortUrl = `${baseUrl}/${shortCode}`;
+        const newUrl = await Url.create({ originalUrl, shortUrl, shortCode });
         res.status(201).json({ success: true, data: newUrl });
       } catch (error) {
         res.status(400).json({ success: false });
