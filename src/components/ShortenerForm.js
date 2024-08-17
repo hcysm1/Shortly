@@ -1,23 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import QRCode from "qrcode.react";
 
 export default function ShortenerForm() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
+  const [loading, setLoading] = useState(false);
   const [urlHistory, setUrlHistory] = useState([]);
 
   useEffect(() => {
-    const fetchUrlHistory = async () => {
-      const res = await fetch("/api/short");
-      const data = await res.json();
-      setUrlHistory(data.data);
-    };
-
     fetchUrlHistory();
   }, []);
 
-  ///////
+  const fetchUrlHistory = useCallback(async () => {
+    const res = await fetch("/api/short");
+    const data = await res.json();
+    setUrlHistory(data.data);
+  }, []);
+
+  useEffect(() => {
+    fetchUrlHistory();
+  }, [fetchUrlHistory]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Optional: show loading state
 
     const res = await fetch("/api/short", {
       method: "POST",
@@ -29,16 +35,30 @@ export default function ShortenerForm() {
 
     const data = await res.json();
     setShortUrl(data.data.shortUrl);
-    console.log(data.data.shortUrl);
-
     setUrl("");
 
-    // Fetch the updated URL history after adding a new short URL
-    const updatedRes = await fetch("/api/short");
-    const updatedData = await updatedRes.json();
-    setUrlHistory(updatedData.data);
+    // Fetch updated URL history
+    fetchUrlHistory();
+
+    setLoading(false); // Optional: hide loading state
   };
-  ///////
+
+  const handleLinkClick = async (entry) => {
+    await fetch(`/api/short`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ shortCode: entry.shortCode }),
+    });
+
+    // Update clicks locally
+    setUrlHistory((prevHistory) =>
+      prevHistory.map((item) =>
+        item._id === entry._id ? { ...item, clicks: item.clicks + 1 } : item
+      )
+    );
+  };
 
   return (
     <div>
@@ -70,28 +90,35 @@ export default function ShortenerForm() {
       <table className="w-full max-w-5xl mt-10">
         <thead>
           <tr className="text-left bg-gray-200">
-            <th className="p-2">Short Link</th>
-            <th className="p-2">Original Link</th>
-            <th className="p-2">QR Code</th>
-            <th className="p-2">Clicks</th>
-            <th className="p-2">Status</th>
-            <th className="p-2">Date</th>
+            <th className="p-4">Short Link</th>
+            <th className="p-4">Original Link</th>
+            <th className="p-4">QR Code</th>
+            <th className="p-4">Clicks</th>
+            <th className="p-4">Status</th>
+            <th className="p-4">Date</th>
           </tr>
         </thead>
         <tbody>
           {urlHistory.map((entry) => (
-            <tr key={entry._id}>
-              <td>
-                {" "}
-                <a href={entry.shortUrl} target="_blank">
+            <tr key={entry._id} className="border-b border-gray-200">
+              <td className="p-4">
+                <a
+                  href={entry.shortUrl}
+                  target="_blank"
+                  onClick={() => handleLinkClick(entry)}
+                >
                   {entry.shortUrl}
                 </a>
               </td>
-              <td>{entry.originalUrl}</td>
-              <td></td>
-              <td>{entry.clicks}</td>
-              <td>{entry.status}</td>
-              <td>{new Date(entry.createdAt).toLocaleDateString()}</td>
+              <td className="p-4">{entry.originalUrl}</td>
+              <td className="p-4">
+                <QRCode value={entry.shortUrl} size={50} />
+              </td>
+              <td className="p-4">{entry.clicks}</td>
+              <td className="p-4">{entry.status}</td>
+              <td className="p-4">
+                {new Date(entry.createdAt).toLocaleDateString()}
+              </td>
             </tr>
           ))}
         </tbody>

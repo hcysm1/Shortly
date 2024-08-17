@@ -28,6 +28,26 @@ export default async function handler(req, res) {
         res.status(500).json({ success: false, message: "Server error" });
       }
       break;
+    case "PUT":
+      try {
+        const { shortCode } = req.body; // Assuming the shortCode is sent in the body
+        const url = await Url.findOneAndUpdate(
+          { shortCode }, // Find the document by shortCode
+          { $inc: { clicks: 1 } }, // Increment the clicks field by 1
+          { new: true } // Return the updated document
+        );
+
+        if (!url) {
+          return res
+            .status(404)
+            .json({ success: false, message: "URL not found" });
+        }
+
+        res.status(200).json({ success: true, data: url });
+      } catch (error) {
+        res.status(500).json({ success: false, message: "Server error" });
+      }
+      break;
     default:
       res.status(400).json({ success: false });
       break;
