@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   const { method } = req; //extracts the HTTP method (e.g., GET, POST) from the request.
 
   await dbConnect(); //check if database is connected
-  const baseUrl = process.env.BASE_URL || "http://localhost:3000";
+  const baseUrl = process.env.BASE_URL;
 
   switch (method) {
     case "POST":
