@@ -34,7 +34,7 @@ function QRCodePopup({ shortUrl, onClose }) {
             Size:
           </label>
           <select id="size" value={size} onChange={handleSizeChange}>
-            <option value={128}>128x128</option>
+            <option value={128}>128x129</option>
             <option value={256}>256x256</option>
             <option value={512}>512x512</option>
           </select>

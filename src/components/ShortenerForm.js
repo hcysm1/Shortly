@@ -102,7 +102,7 @@ export default function ShortenerForm() {
             <th className="p-4">Original Link</th>
             <th className="p-4">QR Code</th>
             <th className="p-4">Clicks</th>
-            <th className="p-4">Status</th>
+            <th className="p-4">action</th>
             <th className="p-4">Date</th>
           </tr>
         </thead>
