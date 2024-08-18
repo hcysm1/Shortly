@@ -17,10 +17,6 @@ export default function ShortenerForm() {
     setUrlHistory(data.data);
   }, []);
 
-  useEffect(() => {
-    fetchUrlHistory();
-  }, [fetchUrlHistory]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // Optional: show loading state
