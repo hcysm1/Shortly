@@ -1,21 +1,24 @@
 import { useState, useEffect, useCallback } from "react";
-import QRCode from "qrcode.react";
+import QRCodePopup from "./QrcodePopup";
+import QRCode from "react-qr-code";
 
 export default function ShortenerForm() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [urlHistory, setUrlHistory] = useState([]);
-
-  useEffect(() => {
-    fetchUrlHistory();
-  }, []);
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedUrl, setSelectedUrl] = useState("");
 
   const fetchUrlHistory = useCallback(async () => {
     const res = await fetch("/api/short");
     const data = await res.json();
     setUrlHistory(data.data);
   }, []);
+
+  useEffect(() => {
+    fetchUrlHistory();
+  }, [fetchUrlHistory]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,6 +57,15 @@ export default function ShortenerForm() {
         item._id === entry._id ? { ...item, clicks: item.clicks + 1 } : item
       )
     );
+  };
+
+  const handleQRCodeClick = (shortUrl) => {
+    setSelectedUrl(shortUrl);
+    setShowPopup(true);
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
   };
 
   return (
@@ -106,10 +118,16 @@ export default function ShortenerForm() {
                   {entry.shortUrl}
                 </a>
               </td>
-              <td className="p-4">{entry.originalUrl}</td>
+              <td className="max-w-xs truncate">{entry.originalUrl}</td>
               <td className="p-4">
-                <QRCode value={entry.shortUrl} size={50} />
+                <button
+                  onClick={() => handleQRCodeClick(entry.shortUrl)}
+                  className="cursor-pointer"
+                >
+                  <QRCode value={entry.shortUrl} size={30} />
+                </button>
               </td>
+
               <td className="p-4">{entry.clicks}</td>
               <td className="p-4">{entry.status}</td>
               <td className="p-4">
@@ -119,6 +137,7 @@ export default function ShortenerForm() {
           ))}
         </tbody>
       </table>
+      {showPopup && <QRCodePopup shortUrl={selectedUrl} onClose={closePopup} />}
     </div>
   );
 }
