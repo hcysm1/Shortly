@@ -5,7 +5,7 @@ function QRCodePopup({ shortUrl, onClose }) {
   const [size, setSize] = useState(128); // Default size
 
   const handleSizeChange = (e) => {
-    setSize(parseInt(e.target.value));
+    setSize(parseInt(e.target.value)); //convert the string to a number
   };
 
   const handleDownload = () => {
