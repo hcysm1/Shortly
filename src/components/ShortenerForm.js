@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import QRCodePopup from "./QrcodePopup";
 import QRCode from "react-qr-code";
+import { FiClipboard, FiTrash2 } from "react-icons/fi"; // Import the clipboard and trash icon
 
 export default function ShortenerForm() {
   const [url, setUrl] = useState("");
@@ -68,6 +69,34 @@ export default function ShortenerForm() {
     setShowPopup(false);
   };
 
+  const handleCopy = (shortUrl) => {
+    navigator.clipboard.writeText(shortUrl); // Copy the short URL to the clipboard
+    alert("Short URL copied to clipboard!");
+  };
+
+  const handleDelete = async (entry) => {
+    try {
+      const res = await fetch(`/api/short`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ shortCode: entry.shortCode }),
+      });
+
+      if (res.ok) {
+        // Remove the URL from the state to delete the row
+        setUrlHistory((prevHistory) =>
+          prevHistory.filter((entry) => entry.shortCode !== entry.shortCode)
+        );
+      } else {
+        const data = await res.json();
+        alert(`Error: ${data.message}`);
+      }
+    } catch (error) {
+      alert("An error occurred while deleting the URL.");
+    }
+  };
   return (
     <div>
       <h1 className="text-4xl font-bold mb-4">Shorten. Simplify. Share</h1>
@@ -102,8 +131,8 @@ export default function ShortenerForm() {
             <th className="p-4">Original Link</th>
             <th className="p-4">QR Code</th>
             <th className="p-4">Clicks</th>
-            <th className="p-4">status</th>
             <th className="p-4">Date</th>
+            <th className="p-4">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -129,9 +158,15 @@ export default function ShortenerForm() {
               </td>
 
               <td className="p-4">{entry.clicks}</td>
-              <td className="p-4">{entry.status}</td>
               <td className="p-4">
                 {new Date(entry.createdAt).toLocaleDateString()}
+              </td>
+              <td className="text-black p-4 inline-flex space-x-2 cursor-pointer">
+                <FiClipboard
+                  size={24}
+                  onClick={() => handleCopy(entry.shortUrl)}
+                />
+                <FiTrash2 size={24} onClick={() => handleDelete(entry)} />
               </td>
             </tr>
           ))}

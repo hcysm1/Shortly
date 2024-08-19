@@ -48,6 +48,27 @@ export default async function handler(req, res) {
         res.status(500).json({ success: false, message: "Server error" });
       }
       break;
+    case "DELETE":
+      try {
+        const { shortCode } = req.body; // Assuming the shortCode is sent in the body
+        const url = await Url.findOneAndDelete(
+          { shortCode } // Find the document by shortCode
+        );
+
+        if (!url) {
+          return res
+            .status(404)
+            .json({ success: false, message: "URL not found" });
+        }
+
+        res.send({ message: "URL deleted successfully" });
+      } catch (error) {
+        res
+          .status(500)
+          .send({ message: "An error occurred while deleting the URL" });
+      }
+      break;
+
     default:
       res.status(400).json({ success: false });
       break;
