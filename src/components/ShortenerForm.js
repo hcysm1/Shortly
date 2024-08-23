@@ -19,7 +19,7 @@ export default function ShortenerForm() {
 
   useEffect(() => {
     fetchUrlHistory();
-  }, []);
+  }, [fetchUrlHistory]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -122,7 +122,7 @@ export default function ShortenerForm() {
           required
         />
         <button
-          className="absolute right-0 top-0 mt-1 mr-1.5 mb-1 px-4 py-2 md:px-6 md:py-2 bg-yellow-500 text-white rounded-full"
+          className="absolute right-1.5 top-1.5 px-4 py-2 md:px-6 md:py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-700"
           type="submit"
         >
           Shorten Now!
@@ -131,7 +131,7 @@ export default function ShortenerForm() {
       <div className="w-full max-w-5xl mt-10 overflow-x-auto">
         <table className="w-full text-left bg-white border border-gray-200">
           <thead>
-            <tr className="text-gray-700 bg-gray-200">
+            <tr className="text-white bg-neutral-800">
               <th className="p-4">Short Link</th>
               <th className="p-4">Original Link</th>
               <th className="p-4">QR Code</th>
@@ -142,8 +142,11 @@ export default function ShortenerForm() {
           </thead>
           <tbody>
             {urlHistory.map((entry) => (
-              <tr key={entry._id} className="border-b border-gray-200">
-                <td className="p-4">
+              <tr
+                key={entry._id}
+                className="border-b border-gray-200 text-center"
+              >
+                <td className="inline-flex space-x-2 text-black cursor-pointer mt-2 p-4 ">
                   <a
                     href={entry.shortUrl}
                     target="_blank"
@@ -151,14 +154,26 @@ export default function ShortenerForm() {
                   >
                     {entry.shortUrl}
                   </a>
+                  <FiClipboard
+                    className=" bg-slate-200 hover:bg-slate-300 rounded-full"
+                    style={{ padding: "0.25rem" }}
+                    size={24}
+                    onClick={() => handleCopy(entry.shortUrl)}
+                  />
                 </td>
+
                 <td className="max-w-xs truncate">{entry.originalUrl}</td>
-                <td className="p-4">
+                <td className=" mt-2 p-4">
                   <button
                     onClick={() => handleQRCodeClick(entry.shortUrl)}
                     className="cursor-pointer"
                   >
-                    <QRCode value={entry.shortUrl} size={30} />
+                    <QRCode
+                      value={entry.shortUrl}
+                      size={30}
+                      className="hover:bg-slate-300 rounded-lg"
+                      style={{ padding: "0.25rem" }}
+                    />
                   </button>
                 </td>
 
@@ -166,11 +181,10 @@ export default function ShortenerForm() {
                 <td className="p-4">
                   {new Date(entry.createdAt).toLocaleDateString()}
                 </td>
-                <td className="text-black p-4 inline-flex space-x-2 cursor-pointer">
-                  <FiClipboard
-                    size={24}
-                    onClick={() => handleCopy(entry.shortUrl)}
-                  />
+                <td
+                  className="text-black inline-flex space-x-2 cursor-pointer hover:bg-slate-300 rounded-full mt-2 p-4"
+                  style={{ padding: "0.25rem" }}
+                >
                   <FiTrash2 size={24} onClick={() => handleDelete(entry)} />
                 </td>
               </tr>
