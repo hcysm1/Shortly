@@ -100,7 +100,7 @@ export default function ShortenerForm() {
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-500 via-gray-500 to-yellow-500 text-transparent bg-clip-text">
+        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-500 via-gray-500 to-yellow-500 text-transparent bg-clip-text leading-tight">
           Shorten. Simplify. Share
         </h1>
         <p className="mb-8">
@@ -115,20 +115,20 @@ export default function ShortenerForm() {
 
         <input
           type="url"
-          className="w-full pl-10 pr-20 py-3 md:pl-12 md:pr-24 rounded-full border-2 border-gray-300 focus:outline-none"
+          className="w-full pl-10 pr-20 py-3 md:pl-12 md:pr-24 rounded-full outline outline-2 outline-gray-300 hover:outline-gray-800 focus:outline-gray-800"
           placeholder="Paste your long link here"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           required
         />
         <button
-          className="absolute right-1.5 top-1.5 px-4 py-2 md:px-6 md:py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-700"
+          className="absolute right-1 top-1 px-4 py-2 md:px-6 md:py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-700"
           type="submit"
         >
           Shorten Now!
         </button>
       </form>
-      <div className="w-full max-w-5xl mt-10 overflow-x-auto">
+      <div className="w-full max-w-5xl mt-10 overflow-x-auto rounded-lg">
         <table className="w-full text-left bg-white border border-gray-200">
           <thead>
             <tr className="text-white bg-neutral-800">
@@ -149,6 +149,7 @@ export default function ShortenerForm() {
                 <td className="inline-flex space-x-2 text-black cursor-pointer mt-2 p-4 ">
                   <a
                     href={entry.shortUrl}
+                    className="hover:text-slate-500"
                     target="_blank"
                     onClick={() => handleLinkClick(entry)}
                   >
