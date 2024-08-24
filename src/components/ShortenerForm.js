@@ -103,7 +103,7 @@ export default function ShortenerForm() {
         <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-500 via-gray-500 to-yellow-500 text-transparent bg-clip-text leading-tight">
           Shorten. Simplify. Share
         </h1>
-        <p className="mb-8">
+        <p className="mb-10">
           Transform long URLs into short, manageable links. Easily share and
           track your links with a user-friendly interface.
         </p>
@@ -128,71 +128,80 @@ export default function ShortenerForm() {
           Shorten Now!
         </button>
       </form>
-      <div className="w-full max-w-5xl mt-10 overflow-x-auto rounded-lg">
-        <table className="w-full text-left bg-white border border-gray-200">
-          <thead>
-            <tr className="text-white bg-neutral-800">
-              <th className="p-4">Short Link</th>
-              <th className="p-4">Original Link</th>
-              <th className="p-4">QR Code</th>
-              <th className="p-4">Clicks</th>
-              <th className="p-4">Date</th>
-              <th className="p-4">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {urlHistory.map((entry) => (
-              <tr
-                key={entry._id}
-                className="border-b border-gray-200 text-center"
-              >
-                <td className="inline-flex space-x-2 text-black cursor-pointer mt-2 p-4 ">
-                  <a
-                    href={entry.shortUrl}
-                    className="hover:text-slate-500"
-                    target="_blank"
-                    onClick={() => handleLinkClick(entry)}
-                  >
-                    {entry.shortUrl}
-                  </a>
-                  <FiClipboard
-                    className=" bg-slate-200 hover:bg-slate-300 rounded-full"
-                    style={{ padding: "0.25rem" }}
-                    size={24}
-                    onClick={() => handleCopy(entry.shortUrl)}
-                  />
-                </td>
 
-                <td className="max-w-xs truncate">{entry.originalUrl}</td>
-                <td className=" mt-2 p-4">
-                  <button
-                    onClick={() => handleQRCodeClick(entry.shortUrl)}
-                    className="cursor-pointer"
-                  >
-                    <QRCode
-                      value={entry.shortUrl}
-                      size={30}
-                      className="hover:bg-slate-300 rounded-lg"
-                      style={{ padding: "0.25rem" }}
-                    />
-                  </button>
-                </td>
-
-                <td className="p-4">{entry.clicks}</td>
-                <td className="p-4">
-                  {new Date(entry.createdAt).toLocaleDateString()}
-                </td>
-                <td
-                  className="text-black inline-flex space-x-2 cursor-pointer hover:bg-slate-300 rounded-full mt-2 p-4"
-                  style={{ padding: "0.25rem" }}
-                >
-                  <FiTrash2 size={24} onClick={() => handleDelete(entry)} />
-                </td>
+      {urlHistory.length === 0 ? (
+        <p className="mt-10 text-gray-400">
+          Looks like you have not shortened any URLs yet. Start by adding your
+          first URL!
+        </p>
+      ) : (
+        <div className="w-full max-w-5xl mt-10 overflow-x-auto rounded-lg">
+          <table className="w-full text-left bg-white border border-gray-200">
+            <thead>
+              <tr className="text-white bg-neutral-800">
+                <th className="p-4">Short Link</th>
+                <th className="p-4">Original Link</th>
+                <th className="p-4">QR Code</th>
+                <th className="p-4">Clicks</th>
+                <th className="p-4">Date</th>
+                <th className="p-4">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+
+            <tbody>
+              {urlHistory.map((entry) => (
+                <tr
+                  key={entry._id}
+                  className="border-b border-gray-200 text-center"
+                >
+                  <td className="inline-flex space-x-2 text-black cursor-pointer mt-2 p-4 ">
+                    <a
+                      href={entry.shortUrl}
+                      className="hover:text-slate-500"
+                      target="_blank"
+                      onClick={() => handleLinkClick(entry)}
+                    >
+                      {entry.shortUrl}
+                    </a>
+                    <FiClipboard
+                      className=" bg-slate-200 hover:bg-slate-300 rounded-full"
+                      style={{ padding: "0.25rem" }}
+                      size={24}
+                      onClick={() => handleCopy(entry.shortUrl)}
+                    />
+                  </td>
+
+                  <td className="max-w-xs truncate">{entry.originalUrl}</td>
+                  <td className=" mt-2 p-4">
+                    <button
+                      onClick={() => handleQRCodeClick(entry.shortUrl)}
+                      className="cursor-pointer"
+                    >
+                      <QRCode
+                        value={entry.shortUrl}
+                        size={30}
+                        className="hover:bg-slate-300 rounded-lg"
+                        style={{ padding: "0.25rem" }}
+                      />
+                    </button>
+                  </td>
+
+                  <td className="p-4">{entry.clicks}</td>
+                  <td className="p-4">
+                    {new Date(entry.createdAt).toLocaleDateString()}
+                  </td>
+                  <td
+                    className="text-black inline-flex space-x-2 cursor-pointer hover:bg-slate-300 rounded-full mt-2 p-4"
+                    style={{ padding: "0.25rem" }}
+                  >
+                    <FiTrash2 size={24} onClick={() => handleDelete(entry)} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       {showPopup && <QRCodePopup shortUrl={selectedUrl} onClose={closePopup} />}
     </div>
   );
