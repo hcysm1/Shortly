@@ -115,14 +115,14 @@ export default function ShortenerForm() {
 
         <input
           type="url"
-          className="w-full pl-10 pr-20 py-3 md:pl-12 md:pr-24 rounded-full outline outline-2 outline-gray-300 hover:outline-gray-800 focus:outline-gray-800"
+          className="w-full pl-10 pr-20 py-2 md:py-3 md:pl-12 md:pr-24 rounded-full outline outline-2 outline-gray-300 hover:outline-gray-800 focus:outline-gray-800 text-xs sm:text-sm md:text-base mx-4 sm:mx-0"
           placeholder="Paste your long link here"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           required
         />
         <button
-          className="absolute right-1 top-1 px-4 py-2 md:px-6 md:py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-700"
+          className="absolute right-1 top-1 px-4 py-2 md:px-6 md:py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-700 text-xs sm:text-sm md:text-base"
           type="submit"
         >
           Shorten Now!
