@@ -144,7 +144,7 @@ export default function ShortenerForm() {
                 <th className="p-4">QR Code</th>
                 <th className="p-4">Clicks</th>
                 <th className="p-4">Date</th>
-                <th className="p-4">Action</th>
+                <th className="p-4">Delete</th>
               </tr>
             </thead>
 
@@ -172,7 +172,7 @@ export default function ShortenerForm() {
                   </td>
 
                   <td className="max-w-xs truncate">{entry.originalUrl}</td>
-                  <td className=" mt-2 p-4">
+                  <td className=" mt-4 p-4">
                     <button
                       onClick={() => handleQRCodeClick(entry.shortUrl)}
                       className="cursor-pointer"
