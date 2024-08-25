@@ -109,11 +109,11 @@ export default function ShortenerForm() {
         </p>
       </div>
       <form className="relative w-full max-w-lg" onSubmit={handleSubmit}>
-        <div className="absolute inset-y-0 left-0 flex items-center pl-3">
-          <FiLink className="text-gray-400 h-5 w-5" />
-        </div>
-
         <div className="relative w-full max-w-lg mx-auto">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+            <FiLink className="text-gray-400 h-5 w-5" />
+          </div>
+
           <input
             type="url"
             className="w-full px-4 pl-10 pr-28 py-2 md:py-3 md:pl-12 md:pr-24 rounded-full outline outline-2 outline-gray-300 hover:outline-gray-800 focus:outline-gray-800 text-xs sm:text-sm md:text-base"
@@ -123,7 +123,7 @@ export default function ShortenerForm() {
             required
           />
           <button
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-700 text-xs sm:text-sm md:text-base"
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-700 text-xs sm:text-sm md:text-base"
             type="submit"
           >
             Shorten Now!
